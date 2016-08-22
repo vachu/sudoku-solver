@@ -1,3 +1,4 @@
 a.out
 *.o
 sudoku-solver
+nbproject/

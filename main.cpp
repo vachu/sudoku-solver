@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <list>
 #include <vector>
 #include <utility>
@@ -23,18 +24,19 @@ std::vector<std::vector<int*>> row;
 int main(void) {
 	for (int i = 0; i < 9; i++) {
 		std::vector<int*> r, c;
-
 		for (int j = 0; j < 9; j++) {
 			r.push_back(&g99[i][j]);
 			c.push_back(&g99[j][i]);
 		}
-
 		row.push_back(std::move(r));
 		col.push_back(std::move(c));
 	}
 
-	for (auto p: col[8]) {
-		std::cout << *p << std::endl;
-	}
+    for (int i = 0; i < 9; i++) {
+        for (auto ptrCell: col[i]) {
+            std::cout << std::setw(3) << *ptrCell;
+        }
+        std::cout << std::endl;
+    }
 	return 0;
 }
