@@ -16,7 +16,7 @@ all: $(TARGET)
 $(TARGET): $(SRCS)
 	g++ -std=c++14 $(CFLAGS) $(SRCS) -o $(TARGET)
 
-main.cpp CSudokuSolver.cpp: CSudokuSolver.h
+CSudokuSolver.cpp: CSudokuSolver.h
 	@touch $@
 
 clean:
