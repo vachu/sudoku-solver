@@ -1,5 +1,5 @@
 TARGET = sudoku-solver
-SRCS = main.cpp
+SRCS = main.cpp CSudokuSolver.cpp
 
 ifndef RELEASE
 	CFLAGS += -g
@@ -15,6 +15,9 @@ all: $(TARGET)
 
 $(TARGET): $(SRCS)
 	g++ -std=c++14 $(CFLAGS) $(SRCS) -o $(TARGET)
+
+main.cpp CSudokuSolver.cpp: CSudokuSolver.h
+	@touch $@
 
 clean:
 	@rm -f $(TARGET) *.o
