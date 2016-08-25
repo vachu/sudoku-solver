@@ -9,6 +9,6 @@
 int main(void) {
     CSudokuGrid solver;
     
-    std::cout << solver.toString(false);
+    std::cout << solver.toString();
     return 0;
 }

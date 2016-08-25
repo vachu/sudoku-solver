@@ -21,11 +21,12 @@ public:
     CSudokuGrid(const CSudokuGrid& orig) = delete;
     virtual ~CSudokuGrid();
     
-    std::string toString(bool isCSVformat = true);
+    std::string toString(bool isCSVformat = false);
 private:
-    int g99[9][9];
+    int g99[9][9]; // 9x9 full sudoku grid
     std::vector<std::vector<int*>> col;
     std::vector<std::vector<int*>> row;
+    std::vector<std::vector<int*>> g33; // 3x3 grid
 };
 
 #endif /* CSUDOKUSOLVER_H */
