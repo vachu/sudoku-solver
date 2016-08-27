@@ -11,6 +11,9 @@
  * Created on 23 August, 2016, 7:01 PM
  */
 #include <string>
+#include <vector>
+#include <istream>
+#include <exception>
 
 #ifndef CSUDOKUSOLVER_H
 #define CSUDOKUSOLVER_H
@@ -18,15 +21,26 @@
 class CSudokuGrid {
 public:
     CSudokuGrid();
+    explicit CSudokuGrid(std::istream &);
     CSudokuGrid(const CSudokuGrid& orig) = delete;
-    virtual ~CSudokuGrid();
     
+    virtual ~CSudokuGrid();
+
+    void solve();
     std::string toString(bool isCSVformat = false);
+    
 private:
     int g99[9][9]; // 9x9 full sudoku grid
-    std::vector<std::vector<int*>> col;
-    std::vector<std::vector<int*>> row;
-    std::vector<std::vector<int*>> g33; // 3x3 grid
+    /*
+     * The following 2D vectors wherein each of the elements in the contained
+     * vector points to cell in the above 9x9 full sudoku grid
+     */
+    std::vector<std::vector<int*>> col; // top->bottom column in 9x9 grid
+    std::vector<std::vector<int*>> row; // left-right row in 9x9 grid
+    std::vector<std::vector<int*>> g33; // 3x3 mini/sub-grid
+
+    void loadSudokuGrid(std::istream &istr)
+        throw(std::ios_base::failure, std::range_error);
 };
 
 #endif /* CSUDOKUSOLVER_H */

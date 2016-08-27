@@ -11,13 +11,9 @@
  * Created on 23 August, 2016, 7:01 PM
  */
 
-#include <vector>
-#include <sstream>
-#include <iomanip>
-#include <iostream>
-
-#include "CSudokuSolver.h"
 /*
+ * 9x9 full Sudoku-Grid: Cell --> row,col
+ * 
 0,0 0,1 0,2 | 0,3 0,4 0,5 | 0,6 0,7 0,8
 1,0 1,1 1,2 | 1,3 1,4 1,5 | 1,6 1,7 1,8
 2,0 2,1 2,2 | 2,3 2,4 2,5 | 2,6 2,7 2,8
@@ -29,8 +25,26 @@
 6,0 6,1 6,2 | 6,3 6,4 6,5 | 6,6 6,7 6,8
 7,0 7,1 7,2 | 7,3 7,4 7,5 | 7,6 7,7 7,8
 8,0 8,1 8,2 | 8,3 8,4 8,5 | 8,6 8,7 8,8
- * g33[i] ==>> (i/3)*3 + (j/3)
+ * 
+ * g33 --> mini / sub-grids
+ * 
+            |             |
+   g33[0]   |    g33[1]   |    g33[2]
+            |             |
+------------+-------------+-------------
+            |             |
+   g33[3]   |    g33[4]   |    g33[5]
+            |             |
+------------+-------------+-------------
+            |             |
+   g33[6]   |    g33[7]   |    g33[8]
+            |             |
  */
+#include <sstream>
+#include <iomanip>
+#include <iostream>
+
+#include "CSudokuSolver.h"
 
 CSudokuGrid::CSudokuGrid() {
     for (int i = 0; i < 9; i++) g33.push_back(std::vector<int*>());
@@ -48,6 +62,10 @@ CSudokuGrid::CSudokuGrid() {
         row.push_back(std::move(r));
         col.push_back(std::move(c));
     }
+}
+
+CSudokuGrid::CSudokuGrid(std::istream &istr) : CSudokuGrid() {
+    loadSudokuGrid(istr);
 }
 
 CSudokuGrid::~CSudokuGrid() {
@@ -71,3 +89,35 @@ std::string CSudokuGrid::toString(bool isCSVFormat) {
     return ss.str();
 }
 
+void CSudokuGrid::loadSudokuGrid(std::istream& istr)
+    throw(std::ios_base::failure, std::range_error)
+{
+    if (!istr.good())
+        throw std::ios_base::failure(
+                                std::string(__FUNCTION__)+": Bad input stream"
+                            );
+    
+    int n = 0;
+    for (std::string line; std::getline(istr, line);) {
+        std::stringstream csvLineStream(line);
+        for (std::string cell; std::getline(csvLineStream, cell, ','); n++) {
+            auto i = n / 9;
+            auto j = n % 9;
+            auto cellValue = std::stoi(cell);
+            if (cellValue < 1 || cellValue > 9)
+                throw new std::range_error(std::string(
+                                    __FUNCTION__)+": Illegal cell value"
+                                );
+
+            g99[i][j] = cellValue;
+        }
+    }
+    if (n != 81)
+        throw std::range_error(
+                        std::string(__FUNCTION__)+": Illegal cell count"
+                    );
+}
+
+void CSudokuGrid::solve() {
+    
+}
