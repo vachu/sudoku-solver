@@ -92,32 +92,75 @@ std::string CSudokuGrid::toString(bool isCSVFormat) {
 void CSudokuGrid::loadSudokuGrid(std::istream& istr)
     throw(std::ios_base::failure, std::range_error)
 {
-    if (!istr.good())
-        throw std::ios_base::failure(
+    if (!istr.good()) throw std::ios_base::failure(
                                 std::string(__FUNCTION__)+": Bad input stream"
                             );
-    
     int n = 0;
     for (std::string line; std::getline(istr, line);) {
         std::stringstream csvLineStream(line);
         for (std::string cell; std::getline(csvLineStream, cell, ','); n++) {
-            auto i = n / 9;
-            auto j = n % 9;
             auto cellValue = std::stoi(cell);
             if (cellValue < 1 || cellValue > 9)
-                throw new std::range_error(std::string(
-                                    __FUNCTION__)+": Illegal cell value"
-                                );
-
+                throw std::range_error(
+                                std::string(__FUNCTION__)+": Illegal cell value"
+                            );
+            auto i = n / 9; auto j = n % 9;
             g99[i][j] = cellValue;
         }
     }
-    if (n != 81)
-        throw std::range_error(
-                        std::string(__FUNCTION__)+": Illegal cell count"
-                    );
+    if (n != 81) throw std::range_error(
+                            std::string(__FUNCTION__)+": Illegal cell count"
+                        );
 }
 
 void CSudokuGrid::solve() {
+    /*
+     * while (getNextZeroValueCell())
+     *      for i in 1..9
+     *          cellValue <- i
+     *          if isGridOk() && solve()
+     *              break
+     *      end-for
+     */
     
+}
+
+// Returns 'true' if the values in the 9x9 Sudoku grid conforms to Sudoku Rule;
+// 'false' otherwise.  If 'ignoreZero' is true, ZERO values in cells are ignored
+bool CSudokuGrid::isGridOk(bool ignoreZero) {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            int g33idx = (i/3)*3 + (j/3);
+            int g33_i  = (i*3)%9 + j%3;
+            
+            auto cellMiniGrid = g33[g33idx];
+            auto cellRow      = row[i];
+            auto cellCol      = col[j];
+            auto val          = g99[i][j];
+
+            if (isInVector(cellRow, val, j, ignoreZero) ||
+                isInVector(cellCol, val, i, ignoreZero) ||
+                isInVector(cellMiniGrid, val, g33_i, ignoreZero) )
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool CSudokuGrid::isInVector(
+                    const std::vector<int*>& v,
+                    int val,
+                    int skipIndex,
+                    bool ignoreZero
+                )
+{
+    for (int i = 0; i < v.size(); i++) {
+        if (i == skipIndex) continue;
+        if (ignoreZero && *v[i] == 0) continue;
+        
+        if (val == *v[i]) return true;
+    }
+    return false;
 }

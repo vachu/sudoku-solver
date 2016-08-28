@@ -1,23 +1,29 @@
-TARGET = sudoku-solver
-SRCS = main.cpp CSudokuSolver.cpp
+#
+# NOTE: This may not be the most ideal Makefile.  Simplicity was overwhelmingly
+# preferred over everthing else.
+#
+TARGET_MAIN = sudoku-solver
+TARGET_TEST = Test
+TARGETS = $(TARGET_MAIN) $(TARGET_TEST)
+SRCS = main.cpp CSudokuSolver.cpp CSudokuSolver.h
+TEST_SRCS = UnitTest.cpp CSudokuSolver.cpp CSudokuSolver.h
 
+FLAGS  += -std=c++14
 ifndef RELEASE
-	CFLAGS += -g
-	LDFLAGS += -g
+	FLAGS += -g
 else
-	CFLAGS += -O3
-	LDFLAGS += -O3
+	FLAGS += -O3
 endif
 
 .PHONY: all clean
 
-all: $(TARGET)
+all: $(TARGETS)
 
-$(TARGET): $(SRCS)
-	g++ -std=c++14 $(CFLAGS) $(SRCS) -o $(TARGET)
+$(TARGET_MAIN): $(SRCS)
+	g++ $(FLAGS) $(SRCS) -o $(TARGET_MAIN)
 
-CSudokuSolver.cpp: CSudokuSolver.h
-	@touch $@
+$(TARGET_TEST): $(TEST_SRCS)
+	g++ $(FLAGS) $(TEST_SRCS) -o $(TARGET_TEST)
 
 clean:
-	@rm -f $(TARGET) *.o
+	@rm -f $(TARGETS)
