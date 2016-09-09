@@ -19,28 +19,27 @@
 
 int main(int argc, char** argv) {
     try {
-        std::cout << argv[0] << std::endl;
         std::stringstream ss;
-        ss      << "1, 1, 1, 2, 2, 2, 3, 3, 3,"
-                << "4, 4, 4, 5, 5, 5, 6, 6, 6,"
-                << "7, 7, 7, 8, 8, 8, 9, 9, 9,"
-                << "9, 9, 9, 8, 8, 8, 7, 7, 7,"
-                << "6, 6, 6, 5, 5, 5, 4, 4, 4,"
-                << "3, 3, 3, 2, 2, 2, 1, 1, 1,"
-                << "5, 5, 5, 6, 6, 6, 7, 7, 7,"
-                << "7, 7, 7, 9, 9, 9, 1, 1, 1,"
-                << "2, 2, 2, 3, 3, 3, 4, 4, 4";
-        CSudokuGrid solver;
-        std::cout << solver.toString();
-        
-        solver.g99[8][8] = 0;
-        std::cout << solver.isGridOk() << std::endl;
+        ss      << "0, 0, 0, 6, 0, 9, 0, 0, 0,"
+                << "0, 0, 7, 0, 0, 0, 1, 0, 0,"
+                << "3, 0, 0, 0, 1, 0, 0, 0, 2,"
+                << "0, 0, 1, 0, 0, 0, 4, 0, 0,"
+                << "0, 5, 0, 0, 9, 0, 0, 8, 0,"
+                << "0, 7, 0, 0, 6, 0, 0, 5, 0,"
+                << "1, 4, 0, 0, 8, 0, 0, 6, 7,"
+                << "0, 6, 8, 0, 5, 0, 9, 2, 0,"
+                << "2, 0, 0, 0, 0, 0, 0, 0, 8,";
+        CSudokuGrid solver(ss);
+        std::cout << "Incomplete Grid:" << std::endl << solver.toString();
+        solver.solve(); //std::cout << std::endl;
+        std::cout << "Completed Grid:" << std::endl << solver.toString();
+        std::cout << "isGridOk()=" << solver.isGridOk(false) << std::endl;
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 1;
     } catch (...) {
         std::cerr << "Unknown Exception";
-        return 2;
+        return 3;
     }
     return 0;
 }

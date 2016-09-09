@@ -32,7 +32,7 @@ public:
     
     virtual ~CSudokuGrid();
 
-    void solve();
+    bool solve();
     std::string toString(bool isCSVformat = false);
     
 PRIVATE:
@@ -54,6 +54,7 @@ PRIVATE:
             int skipIndex, // skip comparing val with v[skipIndex]
             bool ignoreZero = true // if 'true', skip if *v[skipIndex] == 0
         );
+    bool getNextZeroValueCell(int &rowIndex, int &colIndex);
 };
 
 #endif /* CSUDOKUSOLVER_H */
