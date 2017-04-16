@@ -114,9 +114,10 @@ void CSudokuGrid::loadSudokuGrid(std::istream& istr)
 }
 
 bool CSudokuGrid::solve() {
-//    static unsigned int ctr = 0;
+    static unsigned int ctr = 0;
 //    std::cout << std::setw(10) << ++ctr << "\b\b\b\b\b\b\b\b\b\b";
 
+    ctr++;
     int rowIndex = -1, colIndex = -1;
     if (getNextZeroValueCell(rowIndex, colIndex)) {
         for (int n = 1; n <= 9; n++) {
@@ -125,6 +126,7 @@ bool CSudokuGrid::solve() {
             g99[rowIndex][colIndex] = 0;
         }
     }
+    ctr--;
     return isGridOk(false);
 }
 
